@@ -3,7 +3,7 @@
 
 #include "sqlquery.h"
 
-class MySqlQuery : public SqlQuery
+class SQLUTIL2SHARED_EXPORT MySqlQuery : public SqlQuery
 {
 public:
     MySqlQuery(Sql*sql);

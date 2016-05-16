@@ -9,7 +9,8 @@ Sql::Sql() {
 
 Sql::~Sql()
 {
-   // con.close();
+    if (con.isOpen())
+        con.close();
 }
 
 Sql * Sql::connectMySql(const QString& host, const QString& user, const QString& pass, const QString& dbname) {

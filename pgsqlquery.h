@@ -3,7 +3,7 @@
 
 #include "sqlquery.h"
 
-class PgSqlQuery : public SqlQuery
+class SQLUTIL2SHARED_EXPORT PgSqlQuery : public SqlQuery
 {
 public:
     PgSqlQuery(Sql*sql);

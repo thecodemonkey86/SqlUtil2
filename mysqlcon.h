@@ -4,12 +4,12 @@
 #include "sqlcon.h"
 
 
-class MySqlCon : public Sql
+class SQLUTIL2SHARED_EXPORT MySqlCon : public Sql
 {
 public:
     MySqlCon();
     ~MySqlCon();
-    virtual SqlQuery* buildQuery();
+    virtual std::unique_ptr<SqlQuery> buildQuery();
 };
 
 #endif // MYSQLCON_H

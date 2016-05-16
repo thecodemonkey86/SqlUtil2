@@ -13,6 +13,7 @@
 class SqlQuery;
 class Sql;
 
+#include <memory>
 #include "sqlquery.h"
 
 class SQLUTIL2SHARED_EXPORT Sql
@@ -51,7 +52,7 @@ public:
     void bindParam(QSqlQuery* query, const QVariant&);
     int getErrorNr();
 
-    virtual SqlQuery* buildQuery() = 0;
+    virtual std::unique_ptr<SqlQuery> buildQuery() = 0;
 
     QString printDebug(const QString& sql, const QList<QVariant>&  params );
     QString error();

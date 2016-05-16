@@ -11,9 +11,10 @@ MySqlCon::~MySqlCon()
 
 }
 
-SqlQuery *MySqlCon::buildQuery()
+std::unique_ptr<SqlQuery> MySqlCon::buildQuery()
 {
-    MySqlQuery* mysqlQuery=new MySqlQuery(this);
-    return mysqlQuery;
+     return std::move(std::unique_ptr<SqlQuery>(new MySqlQuery(this)));
 }
+
+
 

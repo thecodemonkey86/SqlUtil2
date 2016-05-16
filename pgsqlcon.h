@@ -3,12 +3,12 @@
 
 #include "sqlcon.h"
 
-class PgSqlCon : public Sql
+class SQLUTIL2SHARED_EXPORT PgSqlCon : public Sql
 {
 public:
     PgSqlCon();
     ~PgSqlCon();
-     virtual SqlQuery* buildQuery();
+    virtual std::unique_ptr<SqlQuery> buildQuery();
 };
 
 #endif // PGSQLCON_H

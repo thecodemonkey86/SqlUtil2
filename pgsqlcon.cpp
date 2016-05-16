@@ -11,9 +11,8 @@ PgSqlCon::~PgSqlCon()
 
 }
 
-SqlQuery *PgSqlCon::buildQuery()
+std::unique_ptr<SqlQuery> PgSqlCon::buildQuery()
 {
-    PgSqlQuery * pg=new PgSqlQuery(this);
-    return pg;
+    return std::unique_ptr<SqlQuery>(new PgSqlQuery(this));
 }
 
