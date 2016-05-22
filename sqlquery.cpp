@@ -55,6 +55,18 @@ SqlQuery *SqlQuery::leftJoin(const QString &joinTable, const QString &alias, con
     return this;
 }
 
+SqlQuery *SqlQuery::leftJoin(const QString &joinTable, const QString &alias, const QString &on, const QVariant &param)
+{
+    this->params.append(param);
+    return leftJoin(joinTable,alias,on);
+}
+
+SqlQuery *SqlQuery::leftJoin(const QString &joinTable, const QString &alias, const QString &on, const QList<QVariant> &params)
+{
+    this->params.append(params);
+    return leftJoin(joinTable,alias,on);
+}
+
 SqlQuery *SqlQuery::where(const QString &whereCond)
 {
     if (!conditions.empty()) {
@@ -244,7 +256,15 @@ int SqlQuery::fetchInt()
 void SqlQuery::debug()
 {
 
-    qDebug()<<toString()<<"\n"<<params;
+    QString result(toString());
+   for(int i=0;i<params.size();i++) {
+//       qDebug()<<params.at(i).typeName();
+       QString v= QString(params.at(i).typeName())!= QString( "QByteArray") ? params.at(i).toString() :QString(params.at(i).toByteArray().toHex());
+       QRegExp e("^[0-9][0-9]*$");
+        result.replace(result.indexOf(QChar('?')),1,
+                      v.isNull()?QString("NULL"): e.exactMatch(v)?v:QString("'")+ v+ QString("'"));
+   }
+   qDebug()<<result;
 
 }
 const QString SqlQuery::IN = QString(" IN ");

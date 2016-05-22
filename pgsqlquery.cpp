@@ -7,7 +7,7 @@ PgSqlQuery::PgSqlQuery(Sql*sql):SqlQuery(sql)
 
 PgSqlQuery::~PgSqlQuery()
 {
-    qDebug()<<"des";
+    //qDebug()<<"des";
 }
 
 QString PgSqlQuery::toString()
