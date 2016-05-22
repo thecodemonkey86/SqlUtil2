@@ -49,6 +49,18 @@ SqlQuery *SqlQuery::join(const QString &joinTableAlias, const QString &on)
     return this;
 }
 
+SqlQuery *SqlQuery::join(const QString &joinTable, const QString &alias, const QString &on, const QVariant &param)
+{
+    this->params.append(param);
+    return join(joinTable,alias,on);
+}
+
+SqlQuery *SqlQuery::join(const QString &joinTableAlias, const QString &on, const QVariant &param)
+{
+    this->params.append(param);
+    return join(joinTableAlias,on);
+}
+
 SqlQuery *SqlQuery::leftJoin(const QString &joinTable, const QString &alias, const QString & on)
 {
     this->joinTables.append(QString(" LEFT")+JOIN + joinTable+QChar(' ') + alias+SqlQuery::ON+on);
@@ -65,6 +77,24 @@ SqlQuery *SqlQuery::leftJoin(const QString &joinTable, const QString &alias, con
 {
     this->params.append(params);
     return leftJoin(joinTable,alias,on);
+}
+
+SqlQuery *SqlQuery::leftJoin(const QString &joinTableAlias, const QString &on)
+{
+    this->joinTables.append(QString(" LEFT")+JOIN + joinTableAlias+SqlQuery::ON+ on);
+    return this;
+}
+
+SqlQuery *SqlQuery::leftJoin(const QString &joinTableAlias, const QString &on, const QVariant &param)
+{
+    this->params.append(param);
+    return leftJoin(joinTableAlias,on);
+}
+
+SqlQuery *SqlQuery::leftJoin(const QString &joinTableAlias, const QString &on, const QList<QVariant> &params)
+{
+    this->params.append(params);
+    return leftJoin(joinTableAlias,on);
 }
 
 SqlQuery *SqlQuery::where(const QString &whereCond)

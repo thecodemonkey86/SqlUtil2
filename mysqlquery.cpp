@@ -14,15 +14,17 @@ QString MySqlQuery::toString()
 {
     QString query;
     query+="SELECT "+selectFields+ " FROM "+fromTable;
-
-    for(int i=0;i<joinTables.size();i++) {
-        query+=joinTables.at(i);
+    for(const QString&jointable:joinTables) {
+         query+=jointable;
     }
-    query+=" WHERE ";
 
-    foreach (QString cond, conditions) {
-        query += cond;
+    if (!conditions.isEmpty()) {
+        query+=" WHERE ";
+        for(const QString&cond:conditions) {
+             query += cond;
+        }
     }
+
     if (group.size()>0) {
         query += " GROUP BY " + group.at(0);
         for(int i=1;i<group.size();i++) {
