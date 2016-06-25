@@ -2,17 +2,27 @@
 
 
 
-SqlException::SqlException(Sql*s, QString query) throw() : QtException(s->error())
+QString SqlException::getQuery() const
 {
-    this->errorNr= s->getErrorNr();
+    return query;
+}
+
+void SqlException::setQuery(const QString &value)
+{
+    query = value;
+}
+
+SqlException::SqlException(int errorNr,const QString&error,const QString&query) throw() : QtException(error)
+{
+    this->errorNr= errorNr;
     this->query = query;
 }
 
-SqlException::SqlException(Sql *s) throw() : QtException(s->error())
+SqlException::SqlException(int errorNr, const QString &error) throw() : QtException(error)
 {
-    this->errorNr= s->getErrorNr();
-    this->query = QString("no query");
+     this->errorNr= errorNr;
 }
+
 
 SqlException::~SqlException()  throw()
 {
@@ -21,14 +31,8 @@ SqlException::~SqlException()  throw()
 
 
 
-
-
 int SqlException::getErrorNr()
 {
     return errorNr;
 }
 
-QString SqlException::getQuery()
-{
-    return query;
-}

@@ -2,6 +2,7 @@
 #define PGSQLCON_H
 
 #include "sqlcon.h"
+#include "pgsqlquery.h"
 
 class SQLUTIL2SHARED_EXPORT PgSqlCon : public Sql
 {

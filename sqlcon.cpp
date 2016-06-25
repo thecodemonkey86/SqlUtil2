@@ -23,7 +23,7 @@ Sql * Sql::connectMySql(const QString& host, const QString& user, const QString&
     if (sql->con.open()) {
         return sql;
     } else {
-        throw SqlException(sql);
+        throw SqlException( sql->getErrorNr(),sql->con.driver()->lastError().text());
     }
 }
 
@@ -38,7 +38,7 @@ Sql * Sql::connectPg(const QString& host, const QString& user, const QString& pa
    if (sql->con.open()) {
        return sql;
    } else {
-       throw SqlException(sql);
+       throw SqlException(sql->getErrorNr(),sql->con.driver()->lastError().text());
    }
 }
 
@@ -118,14 +118,14 @@ return con.driver()->lastError().number();
 
 QSqlRecord Sql::fetchRow(const QString& sql, const QVariant&param)
 {
-    QSqlQuery* q = new QSqlQuery(con);
-    q->setForwardOnly(true);
-    if (q->prepare(sql)) {
-        q->addBindValue(param );
-        if ( q->exec()) {
+    QSqlQuery q(con);
+    q.setForwardOnly(true);
+    if (q.prepare(sql)) {
+        q.addBindValue(param );
+        if ( q.exec()) {
 
-            if (q->next()) {
-                QSqlRecord res=q->record();
+            if (q.next()) {
+                QSqlRecord res=q.record();
 
                 return res;
             }
@@ -133,7 +133,7 @@ QSqlRecord Sql::fetchRow(const QString& sql, const QVariant&param)
 
     }
 
-    throw new SqlException(this);
+    throw SqlException(getErrorNr(),con.driver()->lastError().text(),sql);
 }
 
 QSqlRecord Sql::fetchRow(const QString& sql, const QList<QVariant>& params)
@@ -155,7 +155,7 @@ QSqlRecord Sql::fetchRow(const QString& sql, const QList<QVariant>& params)
 
     }
 
-   throw new SqlException(this);
+   throw SqlException(getErrorNr(),con.driver()->lastError().text(),sql);
 }
 
 bool Sql::execute(const QString& sql, const QList<QVariant>&  params) {

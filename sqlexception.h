@@ -13,11 +13,12 @@ class SQLUTIL2SHARED_EXPORT SqlException : public QtException
 private: int errorNr;
 private: QString query;
 public:
-    SqlException(Sql*, QString)  throw();
-    SqlException(Sql*)  throw();
+    SqlException(int errorNr, const QString&error,const QString&query)  throw();
+    SqlException(int errorNr, const QString&error) throw();
     virtual ~SqlException() throw();
     int getErrorNr();
-    QString getQuery();
+    QString getQuery() const;
+    void setQuery(const QString &value);
 };
 
 #endif // SQLEXCEPTION_H
