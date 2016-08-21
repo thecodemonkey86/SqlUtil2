@@ -26,7 +26,7 @@ QString PgSqlQuery::toString()
     if (!conditions.empty()) {
         query+=" WHERE ";
 
-        foreach (QString cond, conditions) {
+        for(const QString &cond: conditions) {
             query += cond;
         }
     }

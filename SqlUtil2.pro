@@ -14,10 +14,18 @@ TEMPLATE = lib
 DEFINES += SQLUTIL2_LIBRARY
 DEFINES *= QT_USE_QSTRINGBUILDER
 
-CONFIG += c++11
+CONFIG += c++14
 
 win32 {
     CONFIG += dll
+}
+
+
+CONFIG(release, debug|release) {
+    QMAKE_CFLAGS_RELEASE -= -O
+    QMAKE_CFLAGS_RELEASE -= -O1
+    QMAKE_CFLAGS_RELEASE -= -O2
+    QMAKE_CXXFLAGS_RELEASE *= -O3
 }
 
 
@@ -45,9 +53,8 @@ HEADERS += sqlutil2.h\
 
 
 
-
-unix:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_5_0_GCC_64bit/release/ -lQtCommon
-else:unix:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_5_0_GCC_64bit/debug/ -lQtCommon
+CONFIG(release, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_7_0_GCC_64bit/release/ -lQtCommon
+CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_7_0_GCC_64bit/debug/ -lQtCommon
 
 INCLUDEPATH += ../QtCommon
 
