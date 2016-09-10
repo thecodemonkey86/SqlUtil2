@@ -11,9 +11,9 @@ MySqlCon::~MySqlCon()
 
 }
 
-std::unique_ptr<SqlQuery> MySqlCon::buildQuery()
+std::shared_ptr<SqlQuery> MySqlCon::buildQuery()
 {
-     return std::move(std::unique_ptr<SqlQuery>(new MySqlQuery(this)));
+     return make_shared<MySqlQuery>(this);
      //
 }
 

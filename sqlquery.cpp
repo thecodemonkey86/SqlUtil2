@@ -255,7 +255,7 @@ std::unique_ptr<QSqlQuery>SqlQuery::execQuery()
             QString msg=q->lastError().text();
             qDebug()<<msg;
             qDebug()<<q->driver()->lastError().text();
-            throw SqlException(sql->getErrorNr(), toString());
+            throw SqlException(sql->getErrorNr(),q->driver()->lastError().text(), toString());
         }
         return q;
 
@@ -268,7 +268,7 @@ std::unique_ptr<QSqlQuery>SqlQuery::execQuery()
         QString msg=q->lastError().text();
         qDebug()<<msg;
         //qDebug()<<q->driver()->lastError().text();
-        throw SqlException(sql->getErrorNr(), toString());
+        throw SqlException(sql->getErrorNr(), q->driver()->lastError().text(),toString());
     }
 
 }

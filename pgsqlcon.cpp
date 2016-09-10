@@ -11,8 +11,8 @@ PgSqlCon::~PgSqlCon()
 
 }
 
-std::unique_ptr<SqlQuery> PgSqlCon::buildQuery()
+std::shared_ptr<SqlQuery> PgSqlCon::buildQuery()
 {
-    return std::unique_ptr<SqlQuery>(new PgSqlQuery(this));
+    return std::make_shared<PgSqlQuery>(this);
 }
 

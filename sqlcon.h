@@ -46,13 +46,14 @@ public:
     bool commitTransaction();
     bool rollbackTransaction();
     QSqlQuery* query(const QString& sql, const QVariant&);
+    QSqlQuery* query(const QString& sql);
     QSqlQuery* query(const QString& sql, const QList<QVariant>&  params);
     QSqlQuery* prepare(const QString& sql);
     void bindParams(QSqlQuery* query, const QList<QVariant>&  params);
     void bindParam(QSqlQuery* query, const QVariant&);
     int getErrorNr();
 
-    virtual std::unique_ptr<SqlQuery> buildQuery() = 0;
+    virtual std::shared_ptr<SqlQuery> buildQuery() = 0;
 
     QString printDebug(const QString& sql, const QList<QVariant>&  params );
     QString error();

@@ -234,6 +234,23 @@ QSqlQuery* Sql::query(const QString& sql, const QVariant&param)
 
     throw QtException(msg);
 }
+QSqlQuery* Sql::query(const QString& sql)
+{
+    QSqlQuery *q=new QSqlQuery (con);
+    q->setForwardOnly(true);
+    if (q->prepare(sql)) {
+        if (!q->exec()) {
+            const QString& msg=q->lastError().text();
+
+            throw QtException(msg);
+        }
+        return q;
+
+    }
+    const QString& msg=q->lastError().text();
+
+    throw QtException(msg);
+}
 
 QSqlQuery* Sql::query(const QString& sql, const QList<QVariant>& params)
 {
