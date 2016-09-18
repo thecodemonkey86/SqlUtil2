@@ -15,6 +15,7 @@
 class SQLUTIL2SHARED_EXPORT SqlQuery
 {
 public:
+    enum OrderDirection{ ORDER_ASC, ORDER_DESC};
     SqlQuery(Sql*sql);
     virtual ~SqlQuery();
     SqlQuery* select();
@@ -48,6 +49,8 @@ public:
     SqlQuery* leftParentheses(const QString &  expression);
     SqlQuery* rightParentheses();
     SqlQuery* limit(int limitResults);
+    SqlQuery* orderBy(const QString & orderByExpression);
+    SqlQuery* orderBy(const QString & order,  OrderDirection direction);
     SqlQuery* deleteFrom(const QString &  table);
     std::unique_ptr<QSqlQuery> execQuery();
     bool execute();
@@ -64,6 +67,7 @@ protected:
     static const QString JOIN;
     QString selectFields;
     QString fromTable;
+    QString orderByExpression;
     QList<QString > joinTables;
     QList<QString> conditions;
     QList<QString> group;

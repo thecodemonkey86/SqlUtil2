@@ -233,6 +233,18 @@ SqlQuery *SqlQuery::limit(int limitResults)
     return this;
 }
 
+SqlQuery *SqlQuery::orderBy(const QString &orderBy, OrderDirection direction)
+{
+    this->orderByExpression = QString("%1 %2 ").arg(orderBy, direction == SqlQuery::ORDER_ASC ? "asc" : "desc");
+    return this;
+}
+
+SqlQuery *SqlQuery::orderBy(const QString &orderByExpression)
+{
+    this->orderByExpression = orderByExpression;
+    return this;
+}
+
 SqlQuery *SqlQuery::deleteFrom(const QString &table)
 {
     this->deleteFromTable = table;
