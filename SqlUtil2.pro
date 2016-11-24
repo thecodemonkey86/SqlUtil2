@@ -58,7 +58,6 @@ CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_7_0
 
 INCLUDEPATH += ../QtCommon
 
-
 unix {
     target.path = /usr/lib
     INSTALLS += target
