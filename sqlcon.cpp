@@ -140,7 +140,7 @@ QSqlRecord Sql::fetchRow(const QString &sql)
 {
     QSqlQuery q(con);
     q.setForwardOnly(true);
-    if (q.prepare(sql) && q.exec() && q.next()) {
+    if (q.prepare(sql) &&  q.exec() && q.next()) {
         QSqlRecord res=q.record();
         return res;
     }
