@@ -136,6 +136,18 @@ QSqlRecord Sql::fetchRow(const QString& sql, const QVariant&param)
     throw SqlException(getErrorNr(),con.driver()->lastError().text(),sql);
 }
 
+QSqlRecord Sql::fetchRow(const QString &sql)
+{
+    QSqlQuery q(con);
+    q.setForwardOnly(true);
+    if (q.prepare(sql) && q.exec() && q.next()) {
+        QSqlRecord res=q.record();
+        return res;
+    }
+
+    throw SqlException(getErrorNr(),con.driver()->lastError().text(),sql);
+}
+
 QSqlRecord Sql::fetchRow(const QString& sql, const QList<QVariant>& params)
 {
      QSqlQuery q(con);
