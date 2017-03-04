@@ -14,9 +14,9 @@ QString PgSqlQuery::toString()
 {
     QString query;
     if (!selectFields.isEmpty()) {
-        query+="SELECT "+selectFields+ " FROM "+fromTable;
+        query += QStringLiteral("SELECT %1 FROM %2").arg(selectFields, fromTable);
     } else if (!deleteFromTable.isEmpty()) {
-         query+="DELETE FROM "+deleteFromTable;
+         query+= QStringLiteral("DELETE FROM %1").arg(deleteFromTable);
     }
 
     for(int i=0;i<joinTables.size();i++) {
@@ -24,21 +24,22 @@ QString PgSqlQuery::toString()
     }
 
     if (!conditions.empty()) {
-        query+=" WHERE ";
+        query+= QStringLiteral(" WHERE ");
+
 
         for(const QString &cond: conditions) {
             query += cond;
         }
     }
+
     if (group.size()>0) {
-        query += " GROUP BY " + group.at(0);
+        query += QStringLiteral(" GROUP BY %1").arg(group.at(0));
         for(int i=1;i<group.size();i++) {
-            query += ",";
-            query += group.at(i);
+            query += QStringLiteral(", %1").arg(group.at(i));
         }
     }
     if (limitResults>0) {
-        query += "LIMIT "+ limitResults;
+        query += QStringLiteral("LIMIT %1").arg( limitResults);
     }
     return query;
 

@@ -15,7 +15,7 @@ SqlQuery::~SqlQuery() {
 
 SqlQuery *SqlQuery::select()
 {
-    this->selectFields = QString("*");
+    this->selectFields = QStringLiteral("*");
     return this;
 }
 
@@ -33,19 +33,19 @@ SqlQuery *SqlQuery::from(const QString &fromTable)
 
 SqlQuery *SqlQuery::from(const QString &fromTable, const QString &alias)
 {
-    this->fromTable = fromTable+QChar(' ') + alias;
+    this->fromTable = fromTable+QStringLiteral("%1 %2").arg(alias);
     return this;
 }
 
 SqlQuery *SqlQuery::join(const QString &joinTable, const QString &alias, const QString & on)
 {
-    this->joinTables.append(JOIN + joinTable+QChar(' ') + alias+SqlQuery::ON+ on);
+    this->joinTables.append(QStringLiteral(" JOIN %1 %2 ON %3").arg( joinTable, alias, on));
     return this;
 }
 
 SqlQuery *SqlQuery::join(const QString &joinTableAlias, const QString &on)
 {
-    this->joinTables.append(JOIN + joinTableAlias+SqlQuery::ON+ on);
+    this->joinTables.append(QStringLiteral(" JOIN %1 ON %2").arg( joinTableAlias,on));
     return this;
 }
 
@@ -63,7 +63,7 @@ SqlQuery *SqlQuery::join(const QString &joinTableAlias, const QString &on, const
 
 SqlQuery *SqlQuery::leftJoin(const QString &joinTable, const QString &alias, const QString & on)
 {
-    this->joinTables.append(QString(" LEFT")+JOIN + joinTable+QChar(' ') + alias+SqlQuery::ON+on);
+    this->joinTables.append(QStringLiteral(" LEFT JOIN %1 %2 ON %3").arg(joinTable, alias,on));
     return this;
 }
 
@@ -81,7 +81,7 @@ SqlQuery *SqlQuery::leftJoin(const QString &joinTable, const QString &alias, con
 
 SqlQuery *SqlQuery::leftJoin(const QString &joinTableAlias, const QString &on)
 {
-    this->joinTables.append(QString(" LEFT")+JOIN + joinTableAlias+SqlQuery::ON+ on);
+    this->joinTables.append(QStringLiteral(" LEFT JOIN %1 ON %2").arg(joinTableAlias,on));
     return this;
 }
 
@@ -235,7 +235,7 @@ SqlQuery *SqlQuery::limit(int limitResults)
 
 SqlQuery *SqlQuery::orderBy(const QString &orderBy, OrderDirection direction)
 {
-    this->orderByExpression = QString("%1 %2 ").arg(orderBy, direction == SqlQuery::ORDER_ASC ? "asc" : "desc");
+    this->orderByExpression = QStringLiteral("%1 %2 ").arg(orderBy, direction == SqlQuery::ORDER_ASC ? "asc" : "desc");
     return this;
 }
 
@@ -306,13 +306,26 @@ void SqlQuery::debug()
         result.replace(result.indexOf(QChar('?')),1,
                       v.isNull()?QString("NULL"): e.exactMatch(v)?v:QString("'")+ v+ QString("'"));
    }
-   qDebug()<<result;
+   std::cout<<result.toUtf8().data();
 
 }
-const QString SqlQuery::IN = QString(" IN ");
-const QString SqlQuery::AND = QString(" AND ");
-const QString SqlQuery::OR = QString(" OR ");
+
+QString SqlQuery::debugAsString()
+{
+    QString result(toString());
+   for(int i=0;i<params.size();i++) {
+//       qDebug()<<params.at(i).typeName();
+       QString v= QString(params.at(i).typeName())!= QString( "QByteArray") ? params.at(i).toString() :QString(params.at(i).toByteArray().toHex());
+       QRegExp e("^[0-9][0-9]*$");
+        result.replace(result.indexOf(QChar('?')),1,
+                      v.isNull()?QString("NULL"): e.exactMatch(v)?v:QString("'")+ v+ QString("'"));
+   }
+   return result;
+}
+const QString SqlQuery::IN = QStringLiteral(" IN ");
+const QString SqlQuery::AND = QStringLiteral(" AND ");
+const QString SqlQuery::OR = QStringLiteral(" OR ");
 const QChar SqlQuery::LP = QChar('(');
 const QChar SqlQuery::RP = QChar(')');
-const QString SqlQuery::ON = QString(" ON ");
-const QString SqlQuery::JOIN = QString(" JOIN ");
+//const QString SqlQuery::ON = QString(" ON ");
+//const QString SqlQuery::JOIN = QString(" JOIN ");

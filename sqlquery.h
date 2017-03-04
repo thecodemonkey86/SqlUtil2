@@ -10,6 +10,7 @@
 #include "sqlexception.h"
 #include "sqlcon.h"
 #include <memory>
+#include <iostream>
 
 
 class SQLUTIL2SHARED_EXPORT SqlQuery
@@ -57,14 +58,16 @@ public:
     int fetchInt();
     virtual QString toString()=0;
     void debug();
-protected:
+    QString debugAsString();
+public:
     static const QString IN;
     static const QString AND;
     static const QString OR;
     static const QChar LP;
     static const QChar RP;
-    static const QString ON;
-    static const QString JOIN;
+//    static const QString ON;
+//    static const QString JOIN;
+protected:
     QString selectFields;
     QString fromTable;
     QString orderByExpression;

@@ -15,7 +15,7 @@ Sql::~Sql()
 
 Sql * Sql::connectMySql(const QString& host, const QString& user, const QString& pass, const QString& dbname) {
      Sql*sql=new MySqlCon();
-     sql->con = QSqlDatabase::addDatabase("QMYSQL");
+     sql->con = QSqlDatabase::addDatabase(QStringLiteral("QMYSQL"));
     sql->con.setHostName(host);
     sql->con.setDatabaseName(dbname);
     sql->con.setUserName(user);
@@ -29,7 +29,7 @@ Sql * Sql::connectMySql(const QString& host, const QString& user, const QString&
 
 Sql * Sql::connectPg(const QString& host, const QString& user, const QString& pass, const QString& dbname,int port) {
     Sql*sql=new PgSqlCon();
-    sql->con = QSqlDatabase::addDatabase("QPSQL");
+    sql->con = QSqlDatabase::addDatabase(QStringLiteral("QPSQL"));
    sql->con.setHostName(host);
    sql->con.setDatabaseName(dbname);
    sql->con.setUserName(user);

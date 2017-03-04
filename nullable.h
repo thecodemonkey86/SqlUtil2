@@ -1,7 +1,6 @@
 #ifndef NULLABLE_H
 #define NULLABLE_H
 
-#include <QVariant>
 #include "sqlutil2_global.h"
 
 template<class T>
@@ -47,11 +46,11 @@ protected:
         this->value = val;
     }
 
-
-
     T val() const {
         return value;
     }
 };
+
+
 
 #endif // NULLABLE_H
