@@ -5,16 +5,18 @@
 #include <QVariant>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSqlRecord>
 #include "sqlexception.h"
 #include <QDebug>
 #include <QSqlError>
-#include "sqlresult.h"
 #include "sqlutil2_global.h"
 class SqlQuery;
 class Sql;
 
 #include <memory>
 #include "sqlquery.h"
+
+using namespace std;
 
 class SQLUTIL2SHARED_EXPORT Sql
 {
@@ -26,16 +28,21 @@ public:
     virtual ~Sql();
     static Sql* connectMySql(const QString& host, const QString& user, const QString& pass, const QString& dbname);
     static Sql* connectPg(const QString& host, const QString& user, const QString& pass, const QString& dbname, int port=5432);
+    static Sql* connectPg(const QString& host, const QString& user, const QString& pass, int port=5432);
+    static unique_ptr<Sql> connectPgUniquePtr(const QString& host, const QString& user, const QString& pass, int port=5432);
+    static shared_ptr<Sql> connectPgSharedPtr(const QString& host, const QString& user, const QString& pass, int port=5432);
+    static unique_ptr<Sql> connectPgUniquePtr(const QString& host, const QString& user, const QString& pass, const QString& dbname, int port=5432);
+    static shared_ptr<Sql> connectPgSharedPtr(const QString& host, const QString& user, const QString& pass, const QString& dbname, int port=5432);
 
-    SqlResult* fetchAll(const QString& sql, const QList<QVariant>&  params) ;
-    SqlResult* fetchAll(const QString& sql, const QVariant&);
-    SqlResult* fetchAll(const QString& sql);
+    QVector<QSqlRecord> fetchAll(const QString& sql, const QList<QVariant>&  params) ;
+    QVector<QSqlRecord> fetchAll(const QString& sql, const QVariant&);
+    QVector<QSqlRecord> fetchAll(const QString& sql);
 
 
     QSqlRecord fetchRow(const QString& sql, const QList<QVariant>&  params);
     QSqlRecord fetchRow(const QString& sql, const QVariant&);
     QSqlRecord fetchRow(const QString& sql);
-
+    void useDatabase(const QString & db);
     bool execute(const QString& sql, const QList<QVariant>&  params);
     bool execute(const QString& sql, const QVariant&);
     bool execute(const QString& sql);
@@ -45,12 +52,12 @@ public:
     bool beginTransaction();
     bool commitTransaction();
     bool rollbackTransaction();
-    QSqlQuery* query(const QString& sql, const QVariant&);
-    QSqlQuery* query(const QString& sql);
-    QSqlQuery* query(const QString& sql, const QList<QVariant>&  params);
-    QSqlQuery* prepare(const QString& sql);
-    void bindParams(QSqlQuery* query, const QList<QVariant>&  params);
-    void bindParam(QSqlQuery* query, const QVariant&);
+    QSqlQuery query(const QString& sql, const QVariant&);
+    QSqlQuery query(const QString& sql);
+    QSqlQuery query(const QString& sql, const QList<QVariant>&  params);
+    QSqlQuery prepare(const QString& sql);
+    void bindParams( QSqlQuery& query, const QList<QVariant>&  params);
+    void bindParam( QSqlQuery& query, const QVariant&);
     int getErrorNr();
 
     virtual std::shared_ptr<SqlQuery> buildQuery() = 0;
