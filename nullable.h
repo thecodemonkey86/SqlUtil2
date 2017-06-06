@@ -33,7 +33,7 @@ protected:
  T value;
  public:
 
- bool isNull() {
+ bool isNull() const {
      return valIsNull;
  }
 
