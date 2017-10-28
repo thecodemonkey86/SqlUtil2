@@ -30,31 +30,35 @@ CONFIG(release, debug|release) {
 
 
 SOURCES += sqlutil2.cpp \
-    sqlexception.cpp \
+    exception/sqlexception.cpp \
     sqlcon.cpp \
     mysqlcon.cpp \
     sqlquery.cpp \
     mysqlquery.cpp \
     pgsqlcon.cpp \
-    pgsqlquery.cpp
+    pgsqlquery.cpp \
+    firebirdsqlcon.cpp \
+    firebirdsqlquery.cpp
 
 
 HEADERS += sqlutil2.h\
         sqlutil2_global.h \
-    sqlexception.h \
+    exception/sqlexception.h \
     sqlcon.h \
-    sqlresult.h \
     mysqlcon.h \
     sqlquery.h \
     mysqlquery.h \
     pgsqlcon.h \
     pgsqlquery.h \
-    nullable.h
+    nullable.h \
+    firebirdsqlcon.h \
+    firebirdsqlquery.h
 
 
 
-CONFIG(release, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_7_0_GCC_64bit/release/ -lQtCommon
-CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_7_0_GCC_64bit/debug/ -lQtCommon
+
+CONFIG(release, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_9_0_MinGW_32bit/release/ -lQtCommon
+CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_9_0_MinGW_32bit/debug/ -lQtCommon
 
 INCLUDEPATH += ../QtCommon
 

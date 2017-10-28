@@ -7,7 +7,7 @@
 #include <QVariant>
 #include "sqlutil2_global.h"
 #include <QSqlQuery>
-#include "sqlexception.h"
+#include "exception/sqlexception.h"
 #include "sqlcon.h"
 #include <memory>
 #include <iostream>
@@ -53,7 +53,7 @@ public:
     SqlQuery* orderBy(const QString & orderByExpression);
     SqlQuery* orderBy(const QString & order,  OrderDirection direction);
     SqlQuery* deleteFrom(const QString &  table);
-    std::unique_ptr<QSqlQuery> execQuery();
+    QSqlQuery execQuery();
     bool execute();
     int fetchInt();
     virtual QString toString()=0;

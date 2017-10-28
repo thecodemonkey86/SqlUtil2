@@ -6,7 +6,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlRecord>
-#include "sqlexception.h"
+#include "exception/sqlexception.h"
 #include <QDebug>
 #include <QSqlError>
 #include "sqlutil2_global.h"
@@ -29,10 +29,12 @@ public:
     static Sql* connectMySql(const QString& host, const QString& user, const QString& pass, const QString& dbname);
     static Sql* connectPg(const QString& host, const QString& user, const QString& pass, const QString& dbname, int port=5432);
     static Sql* connectPg(const QString& host, const QString& user, const QString& pass, int port=5432);
+    static Sql* connectFirebird(const QString & host, const QString & user, const QString & pass, const QString & dbFile, int port);
     static unique_ptr<Sql> connectPgUniquePtr(const QString& host, const QString& user, const QString& pass, int port=5432);
     static shared_ptr<Sql> connectPgSharedPtr(const QString& host, const QString& user, const QString& pass, int port=5432);
     static unique_ptr<Sql> connectPgUniquePtr(const QString& host, const QString& user, const QString& pass, const QString& dbname, int port=5432);
     static shared_ptr<Sql> connectPgSharedPtr(const QString& host, const QString& user, const QString& pass, const QString& dbname, int port=5432);
+    static shared_ptr<Sql> connectFirebirdSharedPtr(const QString& host, const QString& user, const QString& pass, const QString& dbFile, int port=3050);
 
     QVector<QSqlRecord> fetchAll(const QString& sql, const QList<QVariant>&  params) ;
     QVector<QSqlRecord> fetchAll(const QString& sql, const QVariant&);

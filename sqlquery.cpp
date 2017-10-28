@@ -251,23 +251,23 @@ SqlQuery *SqlQuery::deleteFrom(const QString &table)
     return this;
 }
 
-std::unique_ptr<QSqlQuery>SqlQuery::execQuery()
+QSqlQuery SqlQuery::execQuery()
 {
-    std::unique_ptr<QSqlQuery> q(new QSqlQuery(sql->getCon()));
-    q->setForwardOnly(true);
+    QSqlQuery q(sql->getCon());
+    q.setForwardOnly(true);
     // qDebug()<<toString();
-    if (q->prepare(toString())) {
+    if (q.prepare(toString())) {
 
 
         for(int i=0;i<params.size();i++) {
-            q->addBindValue(params.at(i));
+            q.addBindValue(params.at(i));
 
         }
-        if (!q->exec()) {
-            QString msg=q->lastError().text();
+        if (!q.exec()) {
+            QString msg=q.lastError().text();
             qDebug()<<msg;
-            qDebug()<<q->driver()->lastError().text();
-            throw SqlException(sql->getErrorNr(),q->driver()->lastError().text(), toString());
+            qDebug()<<q.driver()->lastError().text();
+            throw SqlException(sql->getErrorNr(),q.driver()->lastError().text(), toString());
         }
         return q;
 
@@ -277,13 +277,14 @@ std::unique_ptr<QSqlQuery>SqlQuery::execQuery()
         f.open(QFile::Truncate| QFile::WriteOnly);
         f.write(toString().toUtf8());
         f.close();*/
-        QString msg=q->lastError().text();
+        QString msg=q.lastError().text();
         qDebug()<<msg;
-        //qDebug()<<q->driver()->lastError().text();
-        throw SqlException(sql->getErrorNr(), q->driver()->lastError().text(),toString());
+        //qDebug()<<q.driver()->lastError().text();
+        throw SqlException(sql->getErrorNr(), q.driver()->lastError().text(),toString());
     }
 
 }
+
 
 bool SqlQuery::execute()
 {
