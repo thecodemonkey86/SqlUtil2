@@ -38,7 +38,9 @@ SOURCES += sqlutil2.cpp \
     pgsqlcon.cpp \
     pgsqlquery.cpp \
     firebirdsqlcon.cpp \
-    firebirdsqlquery.cpp
+    firebirdsqlquery.cpp \
+    sqlitecon.cpp \
+    sqlitequery.cpp
 
 
 HEADERS += sqlutil2.h\
@@ -52,22 +54,24 @@ HEADERS += sqlutil2.h\
     pgsqlquery.h \
     nullable.h \
     firebirdsqlcon.h \
-    firebirdsqlquery.h
+    firebirdsqlquery.h \
+    sqlitecon.h \
+    sqlitequery.h
 
 
 
 win32 {
-CONFIG(release, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_9_0_MinGW_32bit/release/ -lQtCommon
-CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_9_0_MinGW_32bit/debug/ -lQtCommon
+CONFIG(release, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_5_9_1_MinGW_32bit/release/ -lQtCommon2
+else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_5_9_1_MinGW_32bit/debug/ -lQtCommon2
 }
 
 unix {
 
 CONFIG(release, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_7_0_GCC_64bit/release/ -lQtCommon
-CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_7_0_GCC_64bit/debug/ -lQtCommon
+else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_7_0_GCC_64bit/debug/ -lQtCommon
 }
 
-INCLUDEPATH += ../QtCommon
+INCLUDEPATH += ../QtCommon2
 
 unix {
     target.path = /usr/lib

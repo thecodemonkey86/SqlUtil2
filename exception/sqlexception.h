@@ -6,9 +6,8 @@
 #include "sqlutil2_global.h"
 
 class Sql;
-class QtException;
 
-class SQLUTIL2SHARED_EXPORT SqlException : public QtException
+class SQLUTIL2SHARED_EXPORT SqlException : public QtCommon2::QtException
 {
 private: int errorNr;
 private: QString query;

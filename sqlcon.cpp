@@ -2,6 +2,7 @@
 #include <QSqlDriver>
 #include "mysqlcon.h"
 #include "pgsqlcon.h"
+#include "sqlitecon.h"
 #include "firebirdsqlcon.h"
 
 Sql::Sql() {
@@ -91,6 +92,23 @@ Sql* Sql::connectFirebird(const QString & host, const QString & user, const QStr
     auto sql = new FirebirdSqlCon();
     sql->con = QSqlDatabase::addDatabase(QString("qtfirebird"));
      sql->con.setDatabaseName(QStringLiteral("%1/%2:%3").arg(host, QString::number(port), dbFile));
+
+
+     sql->con.setUserName(user);
+     sql->con.setPassword(pass);
+
+    if(sql->con.open()) {
+        return sql;
+    } else {
+        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+    }
+}
+
+Sql *Sql::connectSqlite(const QString &user, const QString &pass, const QString &dbFile)
+{
+    auto sql = new SqliteCon();
+    sql->con = QSqlDatabase::addDatabase(QString("QSQLITE"));
+     sql->con.setDatabaseName(dbFile);
 
 
      sql->con.setUserName(user);
