@@ -54,7 +54,7 @@ public:
     SqlQuery* orderBy(const QString & order,  OrderDirection direction);
     SqlQuery* deleteFrom(const QString &  table);
     QSqlQuery execQuery();
-    bool execute();
+    void execute();
     int fetchInt();
     virtual QString toString()=0;
     void debug();

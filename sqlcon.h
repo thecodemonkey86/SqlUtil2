@@ -46,9 +46,9 @@ public:
     QSqlRecord fetchRow(const QString& sql, const QVariant&);
     QSqlRecord fetchRow(const QString& sql);
     void useDatabase(const QString & db);
-    bool execute(const QString& sql, const QList<QVariant>&  params);
-    bool execute(const QString& sql, const QVariant&);
-    bool execute(const QString& sql);
+    void execute(const QString& sql, const QList<QVariant>&  params);
+    void execute(const QString& sql, const QVariant&);
+    void execute(const QString& sql);
 
     int fetchInt(const QString& sql, const QList<QVariant>&  params);
 

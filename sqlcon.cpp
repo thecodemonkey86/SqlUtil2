@@ -307,7 +307,7 @@ QSqlRecord Sql::fetchRow(const QString & sql, const QList<QVariant> & params) {
     throw SqlException(getErrorNr(), con.driver()->lastError().text(), sql);
 }
 
-bool Sql::execute(const QString & sql, const QList<QVariant> & params) {
+void Sql::execute(const QString & sql, const QList<QVariant> & params) {
     QSqlQuery q(con);
     bool res = q.prepare(sql);
     for(int i = 0; i < params.size(); i++) {
@@ -318,10 +318,13 @@ bool Sql::execute(const QString & sql, const QList<QVariant> & params) {
     res = res & q.exec();
 
 
-    return res;
+    if(!res) {
+        qDebug() << printDebug(sql,params);
+        throw SqlException(q.lastError().number(), q.lastError().text());
+    }
 }
 
-bool Sql::execute(const QString & sql, const QVariant & param) {
+void Sql::execute(const QString & sql, const QVariant & param) {
     QSqlQuery q(con);
     bool res = q.prepare(sql);
     q.addBindValue(param);
@@ -329,13 +332,17 @@ bool Sql::execute(const QString & sql, const QVariant & param) {
     res = res & q.exec();
 
 
-    return res;
+    if(!res) {
+        throw SqlException(q.lastError().number(), q.lastError().text());
+    }
 }
 
-bool Sql::execute(const QString & sql) {
+void Sql::execute(const QString & sql) {
     QSqlQuery q(con);
     bool res = q.exec(sql);
-    return res;
+    if(!res) {
+        throw SqlException(q.lastError().number(), q.lastError().text());
+    }
 }
 
 int Sql::fetchInt(const QString & sql, const QList<QVariant> & params) {
@@ -456,7 +463,7 @@ int Sql::insert(const QString & sql, const QList<QVariant> & params) {
         return id;
     }
 
-    return -1;
+    throw SqlException(q.lastError().number(),q.lastError().text());
 }
 
 

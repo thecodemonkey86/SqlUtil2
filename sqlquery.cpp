@@ -286,9 +286,9 @@ QSqlQuery SqlQuery::execQuery()
 }
 
 
-bool SqlQuery::execute()
+void SqlQuery::execute()
 {
-    return this->sql->execute(toString(),params);
+    this->sql->execute(toString(),params);
 }
 
 int SqlQuery::fetchInt()
