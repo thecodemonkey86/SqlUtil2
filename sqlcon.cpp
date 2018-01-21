@@ -104,6 +104,20 @@ Sql* Sql::connectFirebird(const QString & host, const QString & user, const QStr
     }
 }
 
+Sql *Sql::connectSqlite(const QString &dbFile)
+{
+    auto sql = new SqliteCon();
+    sql->con = QSqlDatabase::addDatabase(QString("QSQLITE"));
+     sql->con.setDatabaseName(dbFile);
+
+
+    if(sql->con.open()) {
+        return sql;
+    } else {
+        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+    }
+}
+
 Sql *Sql::connectSqlite(const QString &user, const QString &pass, const QString &dbFile)
 {
     auto sql = new SqliteCon();
