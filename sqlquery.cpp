@@ -255,7 +255,7 @@ QSqlQuery SqlQuery::execQuery()
 {
     QSqlQuery q(sql->getCon());
     q.setForwardOnly(true);
-     qDebug()<<toString();
+  //   qDebug()<<toString();
     if (q.prepare(toString())) {
 
 
