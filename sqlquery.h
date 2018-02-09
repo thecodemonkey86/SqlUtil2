@@ -1,6 +1,6 @@
 #ifndef SQLQUERY_H
 #define SQLQUERY_H
-
+class Sql;
 #include <QString>
 #include <QList>
 #include <QPair>
