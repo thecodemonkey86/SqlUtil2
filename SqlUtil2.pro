@@ -67,8 +67,8 @@ else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop
 
 unix {
 
-CONFIG(release, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_7_0_GCC_64bit/release/ -lQtCommon
-else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon-Desktop_Qt_5_7_0_GCC_64bit/debug/ -lQtCommon
+CONFIG(release, debug|release): LIBS += -L$$PWD/../build-QtCommon2-Desktop_Qt_5_7_0_GCC_64bit/release/ -lQtCommon2
+else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon2-Desktop_Qt_5_7_0_GCC_64bit/debug/ -lQtCommon2
 }
 
 INCLUDEPATH += ../QtCommon2

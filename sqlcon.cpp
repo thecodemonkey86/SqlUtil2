@@ -351,6 +351,19 @@ void Sql::execute(const QString & sql, const QVariant & param) {
     }
 }
 
+void Sql::execute(const QString & sql, int param) {
+    QSqlQuery q(con);
+    bool res = q.prepare(sql);
+    q.addBindValue(QVariant::fromValue(param));
+
+    res = res & q.exec();
+
+
+    if(!res) {
+        throw SqlException(q.lastError().number(), q.lastError().text());
+    }
+}
+
 void Sql::execute(const QString & sql) {
     QSqlQuery q(con);
     bool res = q.exec(sql);

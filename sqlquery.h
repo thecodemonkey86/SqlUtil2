@@ -38,6 +38,7 @@ public:
     SqlQuery* leftJoin(const QString &  joinTableAlias, const QString &  on, const QList<QVariant>& params);
     SqlQuery* where(const QString &  whereCond);
     SqlQuery* where(const QString &  whereCond, const QVariant&param);
+    SqlQuery* where(const QString &  whereCond, int param);
     SqlQuery* where(const QString &  whereCond, const QList<QVariant>& params);
     SqlQuery* andWhere(const QString &  whereCond);
     SqlQuery* andWhere(const QString &  whereCond, const QVariant&param);

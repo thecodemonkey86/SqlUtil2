@@ -113,6 +113,13 @@ SqlQuery *SqlQuery::where(const QString &whereCond, const QVariant &param)
     return where(whereCond);
 }
 
+SqlQuery *SqlQuery::where(const QString &whereCond, int param)
+{
+
+    this->params.append(QVariant::fromValue(param));
+    return where(whereCond);
+}
+
 SqlQuery *SqlQuery::where(const QString &whereCond, const QList<QVariant>& params)
 {
 
