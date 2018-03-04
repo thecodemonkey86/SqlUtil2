@@ -74,7 +74,7 @@ shared_ptr<Sql> Sql::connectPgSharedPtr(const QString & host, const QString & us
 
 shared_ptr<Sql> Sql::connectFirebirdSharedPtr(const QString & host, const QString & user, const QString & pass, const QString & dbFile, int port) {
     auto sql = make_shared<FirebirdSqlCon>();
-    sql->con = QSqlDatabase::addDatabase(QString("qtfirebird"));
+    sql->con = QSqlDatabase::addDatabase(QStringLiteral("qtfirebird"));
      sql->con.setDatabaseName(QStringLiteral("%1/%2:%3").arg(host, QString::number(port), dbFile));
 
 
@@ -90,10 +90,10 @@ shared_ptr<Sql> Sql::connectFirebirdSharedPtr(const QString & host, const QStrin
 
 Sql* Sql::connectFirebird(const QString & host, const QString & user, const QString & pass, const QString & dbFile, int port) {
     auto sql = new FirebirdSqlCon();
-    sql->con = QSqlDatabase::addDatabase(QString("qtfirebird"));
+    sql->con = QSqlDatabase::addDatabase(QStringLiteral("qtfirebird"));
      sql->con.setDatabaseName(QStringLiteral("%1/%2:%3").arg(host, QString::number(port), dbFile));
 
-
+  sql->con.setConnectOptions("CHARSET=UTF-8");
      sql->con.setUserName(user);
      sql->con.setPassword(pass);
 
@@ -107,7 +107,7 @@ Sql* Sql::connectFirebird(const QString & host, const QString & user, const QStr
 Sql *Sql::connectSqlite(const QString &dbFile)
 {
     auto sql = new SqliteCon();
-    sql->con = QSqlDatabase::addDatabase(QString("QSQLITE"));
+    sql->con = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"));
      sql->con.setDatabaseName(dbFile);
 
 
@@ -121,7 +121,7 @@ Sql *Sql::connectSqlite(const QString &dbFile)
 Sql *Sql::connectSqlite(const QString &user, const QString &pass, const QString &dbFile)
 {
     auto sql = new SqliteCon();
-    sql->con = QSqlDatabase::addDatabase(QString("QSQLITE"));
+    sql->con = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"));
      sql->con.setDatabaseName(dbFile);
 
 
@@ -334,7 +334,7 @@ void Sql::execute(const QString & sql, const QList<QVariant> & params) {
 
     if(!res) {
         qDebug() << printDebug(sql,params);
-        throw SqlException(q.lastError().number(), q.lastError().text());
+        throw SqlException(q.lastError().number(), q.lastError().text().isEmpty() ? q.driver()->lastError().text() :q.lastError().text());
     }
 }
 
@@ -450,10 +450,10 @@ QString Sql::printDebug(const QString & sql, const QList<QVariant> & params) {
     QString result(sql);
     for(int i = 0; i < params.size(); i++) {
         //       qDebug()<<params.at(i).typeName();
-        QString v = QString(params.at(i).typeName()) != QString("QByteArray") ? params.at(i).toString() : QString(params.at(i).toByteArray().toHex());
+        QString v = QString(params.at(i).typeName()) != QStringLiteral("QByteArray") ? params.at(i).toString() : QString(params.at(i).toByteArray().toHex());
         QRegExp e("^[0-9][0-9]*$");
         result.replace(result.indexOf(QChar('?')), 1,
-                       v.isNull() ? QString("NULL") : e.exactMatch(v) ? v : QString("'") + v + QString("'"));
+                       v.isNull() ? QStringLiteral("NULL") : e.exactMatch(v) ? v : QStringLiteral("'") + v + QStringLiteral("'"));
     }
     return result;
 }
