@@ -50,6 +50,7 @@ public:
     void useDatabase(const QString & db);
     void execute(const QString& sql, const QList<QVariant>&  params);
     void execute(const QString& sql, const QVariant&);
+    void execute(const QString& sql, int param);
     void execute(const QString& sql);
 
     int fetchInt(const QString& sql, const QList<QVariant>&  params);
