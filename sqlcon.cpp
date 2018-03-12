@@ -93,7 +93,7 @@ Sql* Sql::connectFirebird(const QString & host, const QString & user, const QStr
     sql->con = QSqlDatabase::addDatabase(QStringLiteral("qtfirebird"));
      sql->con.setDatabaseName(QStringLiteral("%1/%2:%3").arg(host, QString::number(port), dbFile));
 
-  sql->con.setConnectOptions("CHARSET=UTF-8");
+  sql->con.setConnectOptions("CHARSET=UNICODE_FSS");
      sql->con.setUserName(user);
      sql->con.setPassword(pass);
 
@@ -181,7 +181,7 @@ Sql * Sql::connectPg(const QString & host, const QString & user, const QString &
     }
 }
 
-QVector<QSqlRecord>  Sql::fetchAll(const QString & sql, const QVariant & param) {
+QVector<QSqlRecord>  Sql::fetchAll(const QString & sql, const QVariant & param) const {
     QSqlQuery q(con);
     QVector<QSqlRecord> res;
     q.setForwardOnly(true);
@@ -206,7 +206,7 @@ QVector<QSqlRecord>  Sql::fetchAll(const QString & sql, const QVariant & param) 
     return res;
 }
 
-QVector<QSqlRecord>Sql::fetchAll(const QString & sql) {
+QVector<QSqlRecord>Sql::fetchAll(const QString & sql) const {
     QSqlQuery q(con);
     QVector<QSqlRecord> res;
     q.setForwardOnly(true);
@@ -223,7 +223,7 @@ QVector<QSqlRecord>Sql::fetchAll(const QString & sql) {
     return res;
 }
 
-QVector<QSqlRecord>  Sql::fetchAll(const QString & sql, const QList<QVariant> & params) {
+QVector<QSqlRecord>  Sql::fetchAll(const QString & sql, const QList<QVariant> & params) const{
     QSqlQuery q(con);
     QVector<QSqlRecord> res;
     q.setForwardOnly(true);
@@ -250,15 +250,15 @@ QVector<QSqlRecord>  Sql::fetchAll(const QString & sql, const QList<QVariant> & 
     return res;
 }
 
-QString Sql::error() {
+QString Sql::error() const{
     return con.lastError().text().isEmpty() ? con.driver()->lastError().text() : con.lastError().text();
 }
 
-int Sql::getErrorNr() {
+int Sql::getErrorNr() const{
     return con.driver()->lastError().number();
 }
 
-QSqlRecord Sql::fetchRow(const QString & sql, const QVariant & param) {
+QSqlRecord Sql::fetchRow(const QString & sql, const QVariant & param) const{
     QSqlQuery q(con);
     q.setForwardOnly(true);
     if(q.prepare(sql)) {
@@ -277,7 +277,7 @@ QSqlRecord Sql::fetchRow(const QString & sql, const QVariant & param) {
     throw SqlException(getErrorNr(), con.driver()->lastError().text(), sql);
 }
 
-QSqlRecord Sql::fetchRow(const QString & sql) {
+QSqlRecord Sql::fetchRow(const QString & sql) const{
     QSqlQuery q(con);
     q.setForwardOnly(true);
     if(q.prepare(sql) &&  q.exec() && q.next()) {
@@ -300,13 +300,35 @@ void Sql::useDatabase(const QString & db) {
     }
 }
 
-QSqlRecord Sql::fetchRow(const QString & sql, const QList<QVariant> & params) {
+QSqlRecord Sql::fetchRow(const QString & sql, const QList<QVariant> & params) const{
     QSqlQuery q(con);
     q.setForwardOnly(true);
     if(q.prepare(sql)) {
 
         for(int i = 0; i < params.size(); i++) {
             q.addBindValue(params.at(i));
+
+        }
+        if(q.exec()) {
+
+            if(q.next()) {
+                return q.record();
+            }
+        }
+
+    }
+
+    throw SqlException(getErrorNr(), con.driver()->lastError().text(), sql);
+}
+
+QSqlRecord Sql::fetchRow(const QString &sql, const QList<QPair<QString, QVariant> > &params) const
+{
+    QSqlQuery q(con);
+    q.setForwardOnly(true);
+    if(q.prepare(sql)) {
+
+        for(int i = 0; i < params.size(); i++) {
+            q.bindValue(QStringLiteral(":%1").arg(params[i].first),params[i].second);
 
         }
         if(q.exec()) {
@@ -372,13 +394,28 @@ void Sql::execute(const QString & sql) {
     }
 }
 
-int Sql::fetchInt(const QString & sql, const QList<QVariant> & params) {
+int Sql::fetchInt(const QString & sql, const QList<QVariant> & params) const{
     bool ok;
-    int count = fetchRow(sql, params).value(0).toInt(&ok);
+    int val = fetchRow(sql, params).value(0).toInt(&ok);
     if(!ok) {
         throw SqlException(-1, "Invalid query");
     }
-    return count;
+    return val;
+}
+
+int Sql::fetchInt(const QString &sql, const QList<QPair<QString, QVariant> > &params) const
+{
+    bool ok;
+    int val = fetchRow(sql, params).value(0).toInt(&ok);
+    if(!ok) {
+        throw SqlException(-1, "Invalid query");
+    }
+    return val;
+}
+
+QString Sql::fetchString(const QString &sql, const QList<QVariant> &params) const
+{
+    return fetchRow(sql, params).value(0).toString();
 }
 
 bool Sql::beginTransaction() {
@@ -494,7 +531,7 @@ int Sql::insert(const QString & sql, const QList<QVariant> & params) {
 }
 
 
-QSqlDatabase Sql::getCon() {
+QSqlDatabase Sql::getCon() const{
     return con;
 }
 
