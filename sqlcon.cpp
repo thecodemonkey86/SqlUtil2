@@ -498,3 +498,13 @@ QSqlDatabase Sql::getCon() {
     return con;
 }
 
+
+bool Sql::isOpen() const
+{
+    return con.isOpen();
+}
+
+void Sql::remove()
+{
+    QSqlDatabase::removeDatabase(con.connectionName());
+}

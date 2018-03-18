@@ -72,7 +72,8 @@ public:
     QString error();
     int insert(const QString& sql, const QList<QVariant>&  params);
     QSqlDatabase getCon();
-
+    bool isOpen() const;
+    void remove();
 
 };
 
