@@ -39,21 +39,24 @@ public:
     static shared_ptr<Sql> connectFirebirdSharedPtr(const QString& host, const QString& user, const QString& pass, const QString& dbFile, int port=3050);
 
 
-    QVector<QSqlRecord> fetchAll(const QString& sql, const QList<QVariant>&  params) ;
-    QVector<QSqlRecord> fetchAll(const QString& sql, const QVariant&);
-    QVector<QSqlRecord> fetchAll(const QString& sql);
+    QVector<QSqlRecord> fetchAll(const QString& sql, const QList<QVariant>&  params) const ;
+    QVector<QSqlRecord> fetchAll(const QString& sql, const QVariant&) const;
+    QVector<QSqlRecord> fetchAll(const QString& sql) const;
 
 
-    QSqlRecord fetchRow(const QString& sql, const QList<QVariant>&  params);
-    QSqlRecord fetchRow(const QString& sql, const QVariant&);
-    QSqlRecord fetchRow(const QString& sql);
-    void useDatabase(const QString & db);
+    QSqlRecord fetchRow(const QString& sql, const QList<QVariant>&  params) const;
+    QSqlRecord fetchRow(const QString& sql, const QList<QPair<QString,QVariant>>&  params) const;
+    QSqlRecord fetchRow(const QString& sql, const QVariant&) const;
+    QSqlRecord fetchRow(const QString& sql) const;
+    void useDatabase(const QString & db) ;
     void execute(const QString& sql, const QList<QVariant>&  params);
     void execute(const QString& sql, const QVariant&);
     void execute(const QString& sql, int param);
     void execute(const QString& sql);
 
-    int fetchInt(const QString& sql, const QList<QVariant>&  params);
+    int fetchInt(const QString& sql, const QList<QVariant>&  params) const;
+    int fetchInt(const QString& sql,  const QList<QPair<QString,QVariant>>&  params) const;
+    QString fetchString(const QString& sql, const QList<QVariant>&  params) const;
 
     bool beginTransaction();
     bool commitTransaction();
@@ -64,14 +67,14 @@ public:
     QSqlQuery prepare(const QString& sql);
     void bindParams( QSqlQuery& query, const QList<QVariant>&  params);
     void bindParam( QSqlQuery& query, const QVariant&);
-    int getErrorNr();
+    int getErrorNr() const;
 
     virtual std::shared_ptr<SqlQuery> buildQuery() = 0;
 
     QString printDebug(const QString& sql, const QList<QVariant>&  params );
-    QString error();
+    QString error() const;
     int insert(const QString& sql, const QList<QVariant>&  params);
-    QSqlDatabase getCon();
+    QSqlDatabase getCon() const;
     bool isOpen() const;
     void remove();
 

@@ -61,8 +61,8 @@ HEADERS += sqlutil2.h\
 
 
 win32 {
-CONFIG(release, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_5_9_1_MinGW_32bit/release/ -lQtCommon2
-else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_5_9_1_MinGW_32bit/debug/ -lQtCommon2
+CONFIG(release, debug|release): LIBS += -L$$PWD/../build-QtCommon2-Desktop_Qt_5_9_0_MinGW_32bit/release/ -lQtCommon2
+else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-QtCommon2-Desktop_Qt_5_9_0_MinGW_32bit/debug/ -lQtCommon2
 }
 
 unix {
