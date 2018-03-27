@@ -8,6 +8,7 @@ class SQLUTIL2SHARED_EXPORT SqlUtil2
 
 public:
     SqlUtil2();
+    static QString getPlaceholders(int count);
 };
 
 #endif // SQLUTIL2_H

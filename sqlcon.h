@@ -12,6 +12,7 @@
 #include "sqlutil2_global.h"
 class SqlQuery;
 class Sql;
+class SqlException;
 
 #include <memory>
 #include "sqlquery.h"

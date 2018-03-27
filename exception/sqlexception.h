@@ -2,12 +2,11 @@
 #define SQLEXCEPTION_H
 
 #include "exception/qtexception.h"
-#include "sqlcon.h"
 #include "sqlutil2_global.h"
 
-class Sql;
+using namespace QtCommon2;
 
-class SQLUTIL2SHARED_EXPORT SqlException : public QtCommon2::QtException
+class SQLUTIL2SHARED_EXPORT SqlException : public QtException
 {
 private: int errorNr;
 private: QString query;
