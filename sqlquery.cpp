@@ -312,7 +312,7 @@ void SqlQuery::debug()
        QString v= QString(params.at(i).typeName())!= QString( "QByteArray") ? params.at(i).toString() :QString(params.at(i).toByteArray().toHex());
        QRegExp e("^[0-9][0-9]*$");
         result.replace(result.indexOf(QChar('?')),1,
-                      v.isNull()?QString("NULL"): e.exactMatch(v)?v:QString("'")+ v+ QString("'"));
+                      v.isNull()?QStringLiteral("NULL"): e.exactMatch(v)?v:QStringLiteral("'")+ v+ QStringLiteral("'"));
    }
    std::cout<<result.toUtf8().data();
 
@@ -326,7 +326,7 @@ QString SqlQuery::debugAsString()
        QString v= QString(params.at(i).typeName())!= QString( "QByteArray") ? params.at(i).toString() :QString(params.at(i).toByteArray().toHex());
        QRegExp e("^[0-9][0-9]*$");
         result.replace(result.indexOf(QChar('?')),1,
-                      v.isNull()?QString("NULL"): e.exactMatch(v)?v:QString("'")+ v+ QString("'"));
+                      v.isNull()?QStringLiteral("NULL"): e.exactMatch(v)?v:QStringLiteral("'")+ v+ QStringLiteral("'"));
    }
    return result;
 }
@@ -335,5 +335,5 @@ const QString SqlQuery::AND = QStringLiteral(" AND ");
 const QString SqlQuery::OR = QStringLiteral(" OR ");
 const QChar SqlQuery::LP = QChar('(');
 const QChar SqlQuery::RP = QChar(')');
-//const QString SqlQuery::ON = QString(" ON ");
-//const QString SqlQuery::JOIN = QString(" JOIN ");
+//const QString SqlQuery::ON = QStringLiteral(" ON ");
+//const QString SqlQuery::JOIN = QStringLiteral(" JOIN ");

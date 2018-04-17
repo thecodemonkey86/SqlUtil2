@@ -4,7 +4,7 @@
 #include "sqlutil2_global.h"
 
 template<class T>
-class SQLUTIL2SHARED_EXPORT Nullable
+class Nullable
 {
 public:
     Nullable(T val) {
