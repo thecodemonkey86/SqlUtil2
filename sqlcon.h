@@ -47,7 +47,8 @@ public:
 
     QSqlRecord fetchRow(const QString& sql, const QList<QVariant>&  params) const;
     QSqlRecord fetchRow(const QString& sql, const QList<QPair<QString,QVariant>>&  params) const;
-    QSqlRecord fetchRow(const QString& sql, const QVariant&) const;
+    QSqlRecord fetchRow(const QString& sql, const QVariant&param) const;
+    QSqlRecord fetchRow(const QString& sql, const QString&param) const;
     QSqlRecord fetchRow(const QString& sql) const;
     void useDatabase(const QString & db) ;
     void execute(const QString& sql, const QList<QVariant>&  params);
@@ -55,6 +56,8 @@ public:
     void execute(const QString& sql, int param);
     void execute(const QString& sql);
 
+    int fetchInt(const QString& sql, const QVariant & param) const;
+    int fetchInt(const QString& sql, const QString & param) const;
     int fetchInt(const QString& sql, const QList<QVariant>&  params) const;
     int fetchInt(const QString& sql,  const QList<QPair<QString,QVariant>>&  params) const;
     QString fetchString(const QString& sql, const QList<QVariant>&  params) const;

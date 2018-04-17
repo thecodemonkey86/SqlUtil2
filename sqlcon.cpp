@@ -277,6 +277,26 @@ QSqlRecord Sql::fetchRow(const QString & sql, const QVariant & param) const{
     throw SqlException(getErrorNr(), con.driver()->lastError().text(), sql);
 }
 
+QSqlRecord Sql::fetchRow(const QString &sql, const QString &param) const
+{
+    QSqlQuery q(con);
+    q.setForwardOnly(true);
+    if(q.prepare(sql)) {
+        q.addBindValue(param);
+        if(q.exec()) {
+
+            if(q.next()) {
+                QSqlRecord res = q.record();
+
+                return res;
+            }
+        }
+
+    }
+
+    throw SqlException(getErrorNr(), con.driver()->lastError().text(), sql);
+}
+
 QSqlRecord Sql::fetchRow(const QString & sql) const{
     QSqlQuery q(con);
     q.setForwardOnly(true);
@@ -392,6 +412,26 @@ void Sql::execute(const QString & sql) {
     if(!res) {
         throw SqlException(q.lastError().number(), q.lastError().text());
     }
+}
+
+int Sql::fetchInt(const QString &sql, const QVariant &param) const
+{
+    bool ok;
+    int val = fetchRow(sql, param).value(0).toInt(&ok);
+    if(!ok) {
+        throw SqlException(-1, "Invalid query");
+    }
+    return val;
+}
+
+int Sql::fetchInt(const QString &sql, const QString &param) const
+{
+    bool ok;
+    int val = fetchRow(sql, param).value(0).toInt(&ok);
+    if(!ok) {
+        throw SqlException(-1, "Invalid query");
+    }
+    return val;
 }
 
 int Sql::fetchInt(const QString & sql, const QList<QVariant> & params) const{
