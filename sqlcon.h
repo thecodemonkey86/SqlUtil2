@@ -29,10 +29,12 @@ public:
     virtual ~Sql();
     static Sql* connectMySql(const QString& host, const QString& user, const QString& pass, const QString& dbname);
     static Sql* connectPg(const QString& host, const QString& user, const QString& pass, const QString& dbname, int port=5432);
+    static Sql* connectPg(const QString& host, const QString& user, const QString& pass, const QString& dbname, const QString&conName, int port=5432);
     static Sql* connectPg(const QString& host, const QString& user, const QString& pass, int port=5432);
     static Sql* connectFirebird(const QString & host, const QString & user, const QString & pass, const QString & dbFile, int port);
     static Sql* connectSqlite(const QString & user, const QString & pass, const QString & dbFile);
     static Sql *connectSqlite(const QString &dbFile);
+    static Sql *connectSqlite(const QString &dbFile, const QString & connectionName);
     static unique_ptr<Sql> connectPgUniquePtr(const QString& host, const QString& user, const QString& pass, int port=5432);
     static shared_ptr<Sql> connectPgSharedPtr(const QString& host, const QString& user, const QString& pass, int port=5432);
     static unique_ptr<Sql> connectPgUniquePtr(const QString& host, const QString& user, const QString& pass, const QString& dbname, int port=5432);
@@ -60,7 +62,10 @@ public:
     int fetchInt(const QString& sql, const QString & param) const;
     int fetchInt(const QString& sql, const QList<QVariant>&  params) const;
     int fetchInt(const QString& sql,  const QList<QPair<QString,QVariant>>&  params) const;
+    int fetchInt(const QString &sql) const;
     QString fetchString(const QString& sql, const QList<QVariant>&  params) const;
+    QString fetchString(const QString& sql, const QVariant&  param) const;
+    QString fetchString(const QString& sql) const;
 
     bool beginTransaction();
     bool commitTransaction();
@@ -81,6 +86,7 @@ public:
     QSqlDatabase getCon() const;
     bool isOpen() const;
     void remove();
+
 
 };
 

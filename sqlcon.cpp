@@ -25,7 +25,7 @@ Sql * Sql::connectMySql(const QString & host, const QString & user, const QStrin
     if(sql->con.open()) {
         return sql;
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -39,7 +39,7 @@ Sql * Sql::connectPg(const QString & host, const QString & user, const QString &
     if(sql->con.open()) {
         return sql;
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -53,7 +53,7 @@ unique_ptr<Sql> Sql::connectPgUniquePtr(const QString & host, const QString & us
     if(sql->con.open()) {
         return move(sql);
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -68,7 +68,7 @@ shared_ptr<Sql> Sql::connectPgSharedPtr(const QString & host, const QString & us
     if(sql->con.open()) {
         return sql;
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -84,7 +84,7 @@ shared_ptr<Sql> Sql::connectFirebirdSharedPtr(const QString & host, const QStrin
     if(sql->con.open()) {
         return sql;
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -100,7 +100,7 @@ Sql* Sql::connectFirebird(const QString & host, const QString & user, const QStr
     if(sql->con.open()) {
         return sql;
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -114,7 +114,21 @@ Sql *Sql::connectSqlite(const QString &dbFile)
     if(sql->con.open()) {
         return sql;
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
+    }
+}
+
+Sql *Sql::connectSqlite(const QString &dbFile, const QString &connectionName)
+{
+    auto sql = new SqliteCon();
+    sql->con = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"),connectionName);
+     sql->con.setDatabaseName(dbFile);
+
+
+    if(sql->con.open()) {
+        return sql;
+    } else {
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -131,7 +145,7 @@ Sql *Sql::connectSqlite(const QString &user, const QString &pass, const QString 
     if(sql->con.open()) {
         return sql;
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -146,7 +160,7 @@ unique_ptr<Sql> Sql::connectPgUniquePtr(const QString & host, const QString & us
     if(sql->con.open()) {
         return move(sql);
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -160,7 +174,7 @@ shared_ptr<Sql> Sql::connectPgSharedPtr(const QString & host, const QString & us
     if(sql->con.open()) {
         return sql;
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -177,7 +191,22 @@ Sql * Sql::connectPg(const QString & host, const QString & user, const QString &
     if(sql->con.open()) {
         return sql;
     } else {
-        throw SqlException(sql->getErrorNr(), sql->con.driver()->lastError().text());
+        throw SqlException(sql->getErrorNr(), sql-> error());
+    }
+}
+
+Sql * Sql::connectPg(const QString & host, const QString & user, const QString & pass, const QString & dbname, const QString&conName, int port) {
+    Sql * sql = new PgSqlCon();
+    sql->con = QSqlDatabase::addDatabase(QStringLiteral("QPSQL"),conName);
+    sql->con.setHostName(host);
+    sql->con.setDatabaseName(dbname);
+    sql->con.setUserName(user);
+    sql->con.setPassword(pass);
+    sql->con.setPort(port);
+    if(sql->con.open()) {
+        return sql;
+    } else {
+        throw SqlException(sql->getErrorNr(), sql-> error());
     }
 }
 
@@ -266,15 +295,13 @@ QSqlRecord Sql::fetchRow(const QString & sql, const QVariant & param) const{
         if(q.exec()) {
 
             if(q.next()) {
-                QSqlRecord res = q.record();
-
-                return res;
+                return q.record();
             }
         }
 
     }
 
-    throw SqlException(getErrorNr(), con.driver()->lastError().text(), sql);
+    throw SqlException(getErrorNr(),  error(), sql);
 }
 
 QSqlRecord Sql::fetchRow(const QString &sql, const QString &param) const
@@ -286,26 +313,23 @@ QSqlRecord Sql::fetchRow(const QString &sql, const QString &param) const
         if(q.exec()) {
 
             if(q.next()) {
-                QSqlRecord res = q.record();
-
-                return res;
+                return q.record();
             }
         }
 
     }
 
-    throw SqlException(getErrorNr(), con.driver()->lastError().text(), sql);
+    throw SqlException(getErrorNr(), error(), sql);
 }
 
 QSqlRecord Sql::fetchRow(const QString & sql) const{
     QSqlQuery q(con);
     q.setForwardOnly(true);
     if(q.prepare(sql) &&  q.exec() && q.next()) {
-        QSqlRecord res = q.record();
-        return res;
+        return q.record();
     }
 
-    throw SqlException(getErrorNr(), con.driver()->lastError().text(), sql);
+    throw SqlException(getErrorNr(), error(), sql);
 }
 
 void Sql::useDatabase(const QString & db) {
@@ -338,7 +362,7 @@ QSqlRecord Sql::fetchRow(const QString & sql, const QList<QVariant> & params) co
 
     }
 
-    throw SqlException(getErrorNr(), con.driver()->lastError().text(), sql);
+    throw SqlException(getErrorNr(),  error(), sql);
 }
 
 QSqlRecord Sql::fetchRow(const QString &sql, const QList<QPair<QString, QVariant> > &params) const
@@ -360,7 +384,7 @@ QSqlRecord Sql::fetchRow(const QString &sql, const QList<QPair<QString, QVariant
 
     }
 
-    throw SqlException(getErrorNr(), con.driver()->lastError().text(), sql);
+    throw SqlException(getErrorNr(),  error(), sql);
 }
 
 void Sql::execute(const QString & sql, const QList<QVariant> & params) {
@@ -453,9 +477,28 @@ int Sql::fetchInt(const QString &sql, const QList<QPair<QString, QVariant> > &pa
     return val;
 }
 
+int Sql::fetchInt(const QString & sql) const{
+    bool ok;
+    int val = fetchRow(sql).value(0).toInt(&ok);
+    if(!ok) {
+        throw SqlException(-1, "Invalid query");
+    }
+    return val;
+}
+
 QString Sql::fetchString(const QString &sql, const QList<QVariant> &params) const
 {
     return fetchRow(sql, params).value(0).toString();
+}
+
+QString Sql::fetchString(const QString &sql, const QVariant &param) const
+{
+    return fetchRow(sql, param).value(0).toString();
+}
+
+QString Sql::fetchString(const QString &sql) const
+{
+    return fetchRow(sql).value(0).toString();
 }
 
 bool Sql::beginTransaction() {
@@ -502,6 +545,9 @@ QSqlQuery Sql::query(const QString & sql) {
 QSqlQuery Sql::query(const QString & sql, const QList<QVariant> & params) {
     QSqlQuery q(con);
     q.setForwardOnly(true);
+#ifdef QT_DEBUG
+    qDebug() << sql;
+#endif
     if(q.prepare(sql)) {
         for(int i = 0; i < params.size(); i++) {
             q.addBindValue(params.at(i));
