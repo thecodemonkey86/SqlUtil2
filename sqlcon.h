@@ -57,6 +57,9 @@ public:
     void execute(const QString& sql, const QVariant&);
     void execute(const QString& sql, int param);
     void execute(const QString& sql);
+    inline  void execute(const QString &sql, int64_t param) {
+        execute(sql, QVariant::fromValue(param));
+    }
 
     int fetchInt(const QString& sql, const QVariant & param) const;
     int fetchInt(const QString& sql, const QString & param) const;
@@ -86,6 +89,7 @@ public:
     QSqlDatabase getCon() const;
     bool isOpen() const;
     void remove();
+
 
 
 };

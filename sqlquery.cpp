@@ -15,7 +15,7 @@ SqlQuery::~SqlQuery() {
 
 SqlQuery *SqlQuery::select()
 {
-    this->selectFields = QStringLiteral("*");
+    this->selectFields = QLatin1Literal("*");
     return this;
 }
 
@@ -33,7 +33,7 @@ SqlQuery *SqlQuery::from(const QString &fromTable)
 
 SqlQuery *SqlQuery::from(const QString &fromTable, const QString &alias)
 {
-    this->fromTable = fromTable+QStringLiteral("%1 %2").arg(alias);
+    this->fromTable = QStringLiteral("%1 %2").arg(fromTable,alias);
     return this;
 }
 
@@ -77,6 +77,12 @@ SqlQuery *SqlQuery::leftJoin(const QString &joinTable, const QString &alias, con
 {
     this->params.append(params);
     return leftJoin(joinTable,alias,on);
+}
+
+SqlQuery *SqlQuery::leftJoin(const QString &joinTable, const QLatin1String &alias, const QLatin1String &on)
+{
+    this->joinTables.append(QStringLiteral(" LEFT JOIN %1 %2 ON %3").arg(joinTable, alias,on));
+    return this;
 }
 
 SqlQuery *SqlQuery::leftJoin(const QString &joinTableAlias, const QString &on)

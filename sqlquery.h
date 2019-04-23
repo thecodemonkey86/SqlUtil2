@@ -31,7 +31,7 @@ public:
     SqlQuery* leftJoin(const QString &  joinTable, const QString &alias, const QString &  on);
     SqlQuery* leftJoin(const QString &  joinTable, const QString &alias, const QString &  on, const QVariant&param);
     SqlQuery* leftJoin(const QString &  joinTable, const QString &alias, const QString &  on, const QList<QVariant>& params);
-
+    SqlQuery* leftJoin(const QString &  joinTable, const QLatin1String &alias, const QLatin1String &  on);
 
     SqlQuery* leftJoin(const QString &  joinTableAlias, const QString &  on);
     SqlQuery* leftJoin(const QString &  joinTableAlias, const QString &  on, const QVariant&param);
