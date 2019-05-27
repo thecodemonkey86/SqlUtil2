@@ -39,6 +39,7 @@ public:
     SqlQuery* where(const QString &  whereCond);
     SqlQuery* where(const QString &  whereCond, const QVariant&param);
     SqlQuery* where(const QString &  whereCond, int param);
+    SqlQuery* where(const QString &  whereCond, long long param);
     SqlQuery* where(const QString &  whereCond, const QList<QVariant>& params);
     SqlQuery* andWhere(const QString &  whereCond);
     SqlQuery* andWhere(const QString &  whereCond, const QVariant&param);
