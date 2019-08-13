@@ -396,8 +396,9 @@ void Sql::execute(const QString & sql, const QList<QVariant> & params) {
     }
 
     res = res & q.exec();
-
-
+#ifdef QT_DEBUG
+    qDebug() << q.lastError().text();
+#endif
     if(!res) {
         qDebug() << printDebug(sql,params);
         throw SqlException(q.lastError().number(), q.lastError().text().isEmpty() ? q.driver()->lastError().text() :q.lastError().text());
