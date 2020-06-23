@@ -29,6 +29,25 @@ CONFIG(release, debug|release) {
 }
 }
 
+COMPILER = ""
+ARCH = ""
+
+msvc {
+
+ COMPILER = "MSVC2017"
+ MSVC_VER = $$(VisualStudioVersion)
+ equals(MSVC_VER, 16.0){
+     COMPILER = "MSVC2019"
+ }
+
+    equals(QT_ARCH, "x86_64"){
+        ARCH = "64bit"
+    } else {
+         ARCH = "32bit"
+    }
+
+}
+
 
 SOURCES += sqlutil2.cpp \
     exception/sqlexception.cpp \
@@ -61,29 +80,8 @@ HEADERS += sqlutil2.h\
 
 
 
-gcc {
-contains(QT_ARCH, "x86_64"): {
-CONFIG(release, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_$${QT_MAJOR_VERSION}_$${QT_MINOR_VERSION}_$${QT_PATCH_VERSION}_MinGW_64_bit/release/ -lQtCommon2
-else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_$${QT_MAJOR_VERSION}_$${QT_MINOR_VERSION}_$${QT_PATCH_VERSION}_MinGW_64_bit/debug/ -lQtCommon2
-} else {
-CONFIG(release, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_$${QT_MAJOR_VERSION}_$${QT_MINOR_VERSION}_$${QT_PATCH_VERSION}_MinGW_32bit/release/ -lQtCommon2
-else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_$${QT_MAJOR_VERSION}_$${QT_MINOR_VERSION}_$${QT_PATCH_VERSION}_MinGW_32bit/debug/ -lQtCommon2
-}
-
-
-}
-
-msvc {
-CONFIG(release, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_$${QT_MAJOR_VERSION}_$${QT_MINOR_VERSION}_$${QT_PATCH_VERSION}_MSVC2017_64bit/release/ -lQtCommon2
-else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_$${QT_MAJOR_VERSION}_$${QT_MINOR_VERSION}_$${QT_PATCH_VERSION}_MSVC2017_64bit/debug/ -lQtCommon2
-}
-
-
-unix {
-
-CONFIG(release, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_$${QT_MAJOR_VERSION}_$${QT_MINOR_VERSION}_$${QT_PATCH_VERSION}_GCC_64bit/release/ -lQtCommon2
-else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_$${QT_MAJOR_VERSION}_$${QT_MINOR_VERSION}_$${QT_PATCH_VERSION}_GCC_64bit/debug/ -lQtCommon2
-}
+CONFIG(release, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_$${QT_MAJOR_VERSION}_$${QT_MINOR_VERSION}_$${QT_PATCH_VERSION}_$${COMPILER}_$${ARCH}/release/ -lQtCommon2
+else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build/QtCommon2-Desktop_Qt_$${QT_MAJOR_VERSION}_$${QT_MINOR_VERSION}_$${QT_PATCH_VERSION}_$${COMPILER}_$${ARCH}/debug/ -lQtCommon2
 
 INCLUDEPATH += ../QtCommon2
 
